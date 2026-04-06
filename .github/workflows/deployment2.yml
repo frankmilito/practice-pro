@@ -1,8 +1,8 @@
 name: Triggered for new issues
 on: issues
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.issue.number }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.event.issue.number }}
+#   cancel-in-progress: true
 jobs:
   event-details:
     runs-on: ubuntu-latest
