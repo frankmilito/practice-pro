@@ -8,8 +8,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Install deps
-      - run: npm install
+        run: npm install
       - name: Run lint
         run: npm run lint
   test:
@@ -21,7 +22,6 @@ jobs:
       - name: Install deps
         run: npm install
       - name: Run tests
-        # run: npm run test
         run: |
          npm run test
          echo "Tests completed"
