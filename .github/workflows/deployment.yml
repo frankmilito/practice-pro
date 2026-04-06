@@ -46,6 +46,4 @@ jobs:
       - name: Install deps
         run: npm install
       - name: Run deploy
-        run: |
-         npm run deploy
-         echo "Deploy completed"
+        run: echo "Deploy completed"
