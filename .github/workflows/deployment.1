@@ -15,7 +15,7 @@ jobs:
         run: npm run lint
   test:
     runs-on: ubuntu-latest
-    needs: [lint]
+    needs: lint
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -27,7 +27,7 @@ jobs:
          echo "Tests completed"
   build:
     runs-on: ubuntu-latest
-    needs: [lint, test]
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
