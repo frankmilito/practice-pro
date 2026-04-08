@@ -67,3 +67,11 @@ jobs:
         run: echo ${{ needs.build.outputs.script-file }}
       - name: Deploy
         run: echo "Deploying..."
+      
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output some logs
+        run: |
+            echo "something went wrong"
+            echo ${{github}}
