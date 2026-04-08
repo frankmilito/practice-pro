@@ -10,10 +10,11 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        uses: actions/cache@v5
+        uses: actions/setup-node@v6
         with:
-          path: ~/.npm
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          node-version: 23.7.0
+          cache: 'npm'
+
       - name: Install dependencies
         run: npm ci
       - name: Lint code
@@ -29,10 +30,10 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        uses: actions/cache@v5
+        uses: actions/setup-node@v6
         with:
-          path: ~/.npm
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          node-version: 23.7.0
+          cache: 'npm'
       - name: Install dependencies
         run: npm ci
       - name: Build website
