@@ -1,5 +1,6 @@
 import MainContent from './components/MainContent';
 import logo from './assets/images/logo.png';
+import Hello from './components/Hello';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <h1>Learn & Master GitHub Actions</h1>
       </header>
       <MainContent />
+      <Hello/>
     </>
   );
 }
