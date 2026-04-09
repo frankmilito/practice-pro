@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hello = () => {
   return (
-    <div>Adds ci cd deployment</div>
+    <div>Adds ci cd deployment to prod 🚀</div>
   );
 };
 
