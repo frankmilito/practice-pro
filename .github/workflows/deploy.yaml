@@ -1,0 +1,31 @@
+name: Web app pre-deploy
+on: 
+  pull_request:
+  push:
+    branches: 
+      - main
+
+jobs: 
+  code-quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+        
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install deps 
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test -- --run
+
+      - name: Build
+        run: npm run build
