@@ -105,11 +105,11 @@ jobs:
     needs: code-quality-gate
     runs-on: ubuntu-latest
     env:
-    AWS_REGION: us-east-1
-    ECR_REPOSITORY: my-app
-    IMAGE_TAG: latest
-    ECS_CLUSTER: my-app-cluster
-    ECS_SERVICE: my-app-service
+      AWS_REGION: us-east-1
+      ECR_REPOSITORY: my-app
+      IMAGE_TAG: latest
+      ECS_CLUSTER: my-app-cluster
+      ECS_SERVICE: my-app-service
 
     steps:
       - name: Get code
