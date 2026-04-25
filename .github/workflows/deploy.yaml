@@ -4,7 +4,7 @@ on:
   push:
     branches: 
       - main
-
+  workflow_dispatch:
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -104,24 +104,67 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: code-quality-gate
     runs-on: ubuntu-latest
+    env:
+    AWS_REGION: us-east-1
+    ECR_REPOSITORY: my-app
+    IMAGE_TAG: latest
+    ECS_CLUSTER: my-app-cluster
+    ECS_SERVICE: my-app-service
+
     steps:
       - name: Get code
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v4
+      # 1. SETUP AWS CREDENTIALS
+      - name: Setup AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+      # 2. Login to ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 3. Build Docker image
+      - name: Build docker image
+        run: docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+      # 4. Tag image for ECR
+      - name: Tag image
+        run: |
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG \
+          ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # 5. Push to ECR
+      - name: Push image
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # 6. Force ECS to redeploy
+      - name: Deploy to ECS
+        run:  |
+          aws ecs update-service \
+          --cluster $ECS_CLUSTER \
+          --service $ECS_SERVICE \
+          --force-new-deployment
+
+
+      # - name: Setup node
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+      #     cache: 'npm'
+
+      # - name: Install Vercel CLI
+      #   run: npm install --global vercel@latest
       
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      # - name: Pull Vercel Environment Information
+      #   run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      # - name: Build Project Artifacts
+      #   run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      # - name: Deploy Project Artifacts to Vercel
+      #   run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
