@@ -20,6 +20,14 @@ function About() {
     </main>
   );
 }
+function Aws() {
+  return (
+    <main>
+      <h1>About AWS</h1>
+      <p>You can login at <a href="">www.aws.com</a> to get more info about this amazing project.</p>
+    </main>
+  );
+}
 
 function Contact() {
   return (
@@ -42,6 +50,7 @@ function App() {
           <ul>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/about">About</Link></li>
+            <li><Link to='/aws'>Aws</Link></li>
             <li><Link to="/contact">Contact</Link></li>
           </ul>
         </nav>
@@ -50,6 +59,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/aws" element={<Contact />} />
       </Routes>
     </>
   );
