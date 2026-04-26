@@ -109,7 +109,7 @@ jobs:
       ECR_REPOSITORY: my-app
       IMAGE_TAG: latest
       ECS_CLUSTER: my-app-cluster
-      ECS_SERVICE: my-app-service
+      ECS_SERVICE: my-app-task-service-l1vcgdpt
 
     steps:
       - name: Get code
